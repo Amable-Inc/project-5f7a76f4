@@ -1,65 +1,124 @@
-import Image from "next/image";
+'use client';
+
+import { useState } from 'react';
 
 export default function Home() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+  const [noButtonPosition, setNoButtonPosition] = useState({ x: 0, y: 0 });
+  const [showMessage, setShowMessage] = useState(false);
+  const [noButtonSize, setNoButtonSize] = useState(1);
+
+  const moveNoButton = () => {
+    // Generar posición aleatoria
+    const maxX = window.innerWidth - 200;
+    const maxY = window.innerHeight - 100;
+    const newX = Math.random() * maxX;
+    const newY = Math.random() * maxY;
+    
+    setNoButtonPosition({ x: newX, y: newY });
+    
+    // Hacer el botón más pequeño cada vez
+    setNoButtonSize(prev => Math.max(prev - 0.1, 0.3));
+  };
+
+  const handleYes = () => {
+    setShowMessage(true);
+  };
+
+  if (showMessage) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-pink-400 via-red-400 to-pink-600 p-4">
+        <div className="text-center space-y-6 animate-bounce">
+          <h1 className="text-6xl md:text-8xl">🎉❤️🎉</h1>
+          <h2 className="text-4xl md:text-6xl font-bold text-white drop-shadow-lg">
+            ¡Sabía que dirías que sí!
+          </h2>
+          <p className="text-2xl md:text-3xl text-white/90 max-w-2xl">
+            ¡Feliz San Valentín! 💝
+          </p>
+          <p className="text-xl text-white/80 max-w-xl mx-auto">
+            Eres la razón por la que cada día es especial. 
+            Gracias por hacer mi mundo más brillante ✨
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-pink-300 via-purple-300 to-red-300 p-4 overflow-hidden">
+      {/* Corazones de fondo */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(20)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute text-red-400/20 animate-float"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 5}s`,
+              fontSize: `${Math.random() * 3 + 1}rem`,
+            }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            ❤️
+          </div>
+        ))}
+      </div>
+
+      {/* Contenido principal */}
+      <div className="text-center space-y-8 z-10">
+        <div className="space-y-4">
+          <h1 className="text-5xl md:text-7xl font-bold text-white drop-shadow-lg animate-pulse">
+            💌 Pregunta Importante 💌
+          </h1>
+          <p className="text-2xl md:text-4xl font-semibold text-white/90">
+            ¿Quieres ser mi San Valentín?
+          </p>
         </div>
-      </main>
+
+        <div className="flex flex-col sm:flex-row gap-6 items-center justify-center relative mt-12">
+          {/* Botón Sí */}
+          <button
+            onClick={handleYes}
+            className="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-12 rounded-full text-2xl shadow-2xl transform hover:scale-110 transition-all duration-200 hover:shadow-green-500/50"
+          >
+            ¡Sí! 💖
+          </button>
+
+          {/* Botón No que se escapa */}
+          <button
+            onMouseEnter={moveNoButton}
+            onTouchStart={moveNoButton}
+            onClick={moveNoButton}
+            className="bg-red-500 text-white font-bold py-4 px-12 rounded-full text-2xl shadow-2xl transition-all duration-300 hover:shadow-red-500/50"
+            style={{
+              position: noButtonPosition.x === 0 ? 'relative' : 'fixed',
+              left: noButtonPosition.x === 0 ? 'auto' : `${noButtonPosition.x}px`,
+              top: noButtonPosition.x === 0 ? 'auto' : `${noButtonPosition.y}px`,
+              transform: `scale(${noButtonSize})`,
+            }}
+          >
+            No
+          </button>
+        </div>
+
+        <p className="text-lg text-white/70 mt-8 max-w-md mx-auto">
+          Piénsalo bien... 😉
+        </p>
+      </div>
+
+      <style jsx>{`
+        @keyframes float {
+          0%, 100% {
+            transform: translateY(0px) rotate(0deg);
+          }
+          50% {
+            transform: translateY(-20px) rotate(10deg);
+          }
+        }
+        .animate-float {
+          animation: float 6s ease-in-out infinite;
+        }
+      `}</style>
     </div>
   );
 }
